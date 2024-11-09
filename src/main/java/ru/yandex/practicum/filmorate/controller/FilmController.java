@@ -56,7 +56,8 @@ public class FilmController {
         return ++currentMaxId;
     }
 
-    private void checkNewFilm(Film film){
+    private void checkNewFilm(Film film) {
+
         //название не может быть пустым;
         if (film.getName() == null || film.getName().isEmpty()) {
             log.warn("Название не может быть пустым");

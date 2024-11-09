@@ -64,7 +64,7 @@ public class UserController {
         return ++currentMaxId;
     }
 
-    private User checkNewUser(User user){
+    private User checkNewUser(User user) {
         //электронная почта не может быть пустой и должна содержать символ @;
         if (user.getEmail() == null || user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
            log.warn("Электронная почта не может быть пустой и должна содержать символ @");
