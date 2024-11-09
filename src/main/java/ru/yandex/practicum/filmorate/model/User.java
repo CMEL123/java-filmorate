@@ -3,9 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @EqualsAndHashCode
