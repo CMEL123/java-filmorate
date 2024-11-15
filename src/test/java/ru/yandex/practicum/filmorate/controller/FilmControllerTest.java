@@ -21,7 +21,7 @@ public class FilmControllerTest {
     static Film film = new Film();
 
     @BeforeEach
-    public void BeforeEach() {
+    public void beforeEach() {
         film.setName("Test");
         film.setDescription("Description");
         film.setReleaseDate(LocalDate.now());
