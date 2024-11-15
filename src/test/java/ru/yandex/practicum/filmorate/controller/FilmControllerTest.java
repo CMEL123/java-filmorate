@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,19 +18,23 @@ public class FilmControllerTest {
 
     @Autowired
     private FilmController filmController;
+    static Film film = new Film();
 
-    @AfterEach
-    public void afterEach() {
-        FilmController.getFilms().clear();
-    }
-
-    @Test
-    public void testCreateAndAllFilms() {
-        Film film = new Film();
+    @BeforeEach
+    public void BeforeEach() {
         film.setName("Test");
         film.setDescription("Description");
         film.setReleaseDate(LocalDate.now());
         film.setDuration(90);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        filmController.getStorageMap().clear();
+    }
+
+    @Test
+    public void testCreateAndAllFilms() {
         filmController.create(film);
         assertEquals(filmController.findAll().stream().findFirst().get(), film);
         assertEquals(1, filmController.findAll().size());
@@ -37,11 +42,6 @@ public class FilmControllerTest {
 
     @Test
     public void testUpdateAndAllFilms() {
-        Film film = new Film();
-        film.setName("Test");
-        film.setDescription("Description");
-        film.setReleaseDate(LocalDate.now());
-        film.setDuration(90);
         filmController.create(film);
         assertEquals(filmController.findAll().stream().findFirst().get(), film);
         assertEquals(1, filmController.findAll().size());
@@ -59,11 +59,7 @@ public class FilmControllerTest {
 
     @Test
     public void testBadUpdate() {
-        Film film = new Film();
-        film.setName("Test");
-        film.setDescription("Description");
-        film.setReleaseDate(LocalDate.now());
-        film.setDuration(90);
+
         filmController.create(film);
         assertEquals(filmController.findAll().stream().findFirst().get(), film);
         assertEquals(1, filmController.findAll().size());
@@ -85,7 +81,7 @@ public class FilmControllerTest {
 
     @Test
     public void testCreateFilmWithNullName() {
-        Film film = new Film();
+        film.setName(null);
 
         ValidationException thrown = assertThrows(ValidationException.class, () -> {
             filmController.create(film);
@@ -97,7 +93,6 @@ public class FilmControllerTest {
 
     @Test
     public void testCreateFilmWithEmptyName() {
-        Film film = new Film();
         film.setName("");
 
         ValidationException thrown = assertThrows(ValidationException.class, () -> {
@@ -110,8 +105,7 @@ public class FilmControllerTest {
 
     @Test
     public void testCreateFilmWithBadDescription() {
-        Film film = new Film();
-        film.setName("Test");
+
         film.setDescription("*".repeat(201));
 
         ValidationException thrown = assertThrows(ValidationException.class, () -> {
@@ -124,9 +118,6 @@ public class FilmControllerTest {
 
     @Test
     public void testCreateFilmWithBadReleaseDate() {
-        Film film = new Film();
-        film.setName("Test");
-        film.setDescription("*".repeat(199));
         film.setReleaseDate(LocalDate.of(1895, 12, 27));
 
         ValidationException thrown = assertThrows(ValidationException.class, () -> {
@@ -139,10 +130,7 @@ public class FilmControllerTest {
 
     @Test
     public void testCreateFilmWithBadDuration() {
-        Film film = new Film();
-        film.setName("Test");
-        film.setDescription("*".repeat(199));
-        film.setReleaseDate(LocalDate.now());
+
         film.setDuration(-1);
 
         ValidationException thrown = assertThrows(ValidationException.class, () -> {
