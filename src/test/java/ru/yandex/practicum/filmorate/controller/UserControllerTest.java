@@ -20,7 +20,7 @@ public class UserControllerTest {
     static User user = new User();
 
     @BeforeEach
-    public void BeforeEach() {
+    public void beforeEach() {
         user.setName("Test");
         user.setEmail("1@asd.rt");
         user.setLogin("TestLogin");
