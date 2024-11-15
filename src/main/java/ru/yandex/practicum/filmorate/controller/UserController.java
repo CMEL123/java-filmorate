@@ -14,7 +14,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/users")
 @Slf4j
-public class UserController extends Controller{
+public class UserController extends Controller {
 
     @GetMapping
     public Collection<User> findAll() {

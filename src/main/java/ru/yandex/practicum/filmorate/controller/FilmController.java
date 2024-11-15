@@ -12,7 +12,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/films")
 @Slf4j
-public class FilmController extends Controller<Film>{
+public class FilmController extends Controller<Film> {
     private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     @GetMapping

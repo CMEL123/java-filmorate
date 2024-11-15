@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 
-public class Controller<T>{
+public class Controller<T> {
     @Getter
     public HashMap<Long, T> storageMap = new HashMap<>();
 
