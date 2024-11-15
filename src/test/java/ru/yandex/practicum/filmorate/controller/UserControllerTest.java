@@ -26,6 +26,7 @@ public class UserControllerTest {
         user.setLogin("TestLogin");
         user.setBirthday(LocalDate.now());
     }
+
     @AfterEach
     public void afterEach() {
         userController.getStorageMap().clear();
