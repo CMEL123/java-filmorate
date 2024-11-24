@@ -21,14 +21,14 @@ public class FilmService {
     private final InMemoryUserStorage inMemoryUserStorage;
 
     //пользователь ставит лайк фильму.
-    public void addLike(long filmId, long userId){
+    public void addLike(long filmId, long userId) {
         inMemoryUserStorage.getUser(userId);
         Film film = inMemoryFilmStorage.getFilm(filmId);
        film.addUserIds(userId);
     }
 
     //пользователь удаляет лайк.
-    public void delLike(long filmId, long userId){
+    public void delLike(long filmId, long userId) {
         inMemoryUserStorage.getUser(userId);
         Film film = inMemoryFilmStorage.getFilm(filmId);
         film.delUserIds(userId);
@@ -36,18 +36,18 @@ public class FilmService {
 
     // Метод возвращает список из первых count фильмов по количеству лайков.
     //  Если значение параметра count не задано, верните первые 10.
-    public List<Film> getTopFilms(){
+    public List<Film> getTopFilms() {
         return getTopFilms(10);
     }
 
-    public List<Film> getTopFilms(long count){
+    public List<Film> getTopFilms(long count) {
         HashMap<Long, Film> filmsHash = inMemoryFilmStorage.getFilmsHash();
         List<Film> listSortLikeFilms = filmsHash.values().stream()
                 .sorted(Comparator.comparing(el -> -1*el.getLikes()))
                 .collect(Collectors.toList());
         List<Film> listOfPopularFilms = new ArrayList<>();
         if (listSortLikeFilms.size() > count) {
-            for(int i = 0; i < count; i++){
+            for(int i = 0; i < count; i++) {
                 listOfPopularFilms.add(listSortLikeFilms.get(i));
             }
         } else {

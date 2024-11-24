@@ -28,10 +28,10 @@ public class User {
 
     Set<Long> friendIds = new HashSet<>(); //друзья
 
-    public void addFriendIds(long userId){
+    public void addFriendIds(long userId) {
         friendIds.add(userId);
     }
-    public void delFriendIds(long userId){
+    public void delFriendIds(long userId) {
         friendIds.remove(userId);
     }
 }

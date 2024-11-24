@@ -22,7 +22,7 @@ public class UserService {
     }
 
     //добавить друга
-    public void addFriend(long userId, long friendId){
+    public void addFriend(long userId, long friendId) {
         User user = inMemoryUserStorage.getUser(userId);
         User friend = inMemoryUserStorage.getUser(friendId);
         user.addFriendIds(friendId);
@@ -30,7 +30,7 @@ public class UserService {
     }
 
     //удалить друга
-    public void delFriend(long userId, long friendId){
+    public void delFriend(long userId, long friendId) {
         User user = inMemoryUserStorage.getUser(userId);
         User friend = inMemoryUserStorage.getUser(friendId);
         user.delFriendIds(friendId);
@@ -38,7 +38,7 @@ public class UserService {
     }
 
     // получить общих друзей
-    public List<User> getMutualFriends(long userId, long friendId){
+    public List<User> getMutualFriends(long userId, long friendId) {
         HashMap<Long, User> usersHash = inMemoryUserStorage.getUsersHash();
         User user = inMemoryUserStorage.getUser(userId);
         User friend = inMemoryUserStorage.getUser(friendId);

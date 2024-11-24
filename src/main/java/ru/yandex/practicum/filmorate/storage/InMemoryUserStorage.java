@@ -46,7 +46,7 @@ public class InMemoryUserStorage extends GeneratorId implements UserStorage {
         return newUser;
     }
 
-    public User getUser(long userId){
+    public User getUser(long userId) {
         User user = usersHash.get(userId);
         if (user == null) throw new NotFoundException("Нет пользователя с id: " + userId);
         return user;
