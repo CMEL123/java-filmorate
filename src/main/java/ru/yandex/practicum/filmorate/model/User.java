@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode
@@ -16,11 +18,20 @@ public class User {
     @NotBlank(message = "Электронная почта не может быть пустой")
     @Email(message = "Электронная почта не может быть пустой и должна содержать символ @")
     String email; //электронная почта — email;
-    @NotNull(message = "Логин не может быть пустым")
+
     @NotBlank(message = "Логин не может быть пустым и содержать пробелы")
     String login; //логин пользователя — login;
     String name; //имя для отображения — name;
     @NotNull(message = "Дата рождения не может быть пустым.")
     @Past(message = "Дата рождения не может быть в будущем.")
     LocalDate birthday; //дата рождения — birthday.
+
+    Set<Long> friendIds = new HashSet<>(); //друзья
+
+    public void addFriendIds(long userId){
+        friendIds.add(userId);
+    }
+    public void delFriendIds(long userId){
+        friendIds.remove(userId);
+    }
 }

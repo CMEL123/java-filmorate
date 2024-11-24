@@ -1,73 +1,69 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
-
-import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 
 @RestController
-@RequestMapping("/users")
 @Slf4j
-public class UserController extends Controller {
+@RequiredArgsConstructor
+public class UserController {
+    private final InMemoryUserStorage inMemoryUserStorage;
+    private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/users")
     public Collection<User> findAll() {
-        log.info("Get all users");
-        return storageMap.values();
+        log.info("/users");
+        return inMemoryUserStorage.getUsers();
     }
 
-    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/users")
     public User create(@Valid @RequestBody User user) {
-        log.info("Create user: {}", user);
-        user = checkNewUser(user);
-
-        user.setId(getNextId());
-        storageMap.put(user.getId(), user);
-        return user;
+        log.info("/users. Create");
+        return inMemoryUserStorage.addUser(user);
     }
 
-    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/users")
     public User update(@Valid @RequestBody User user) {
-        log.info("Update user: {}", user);
-        checkNewUser(user);
-        if (!storageMap.containsKey(user.getId())) {
-            throw new ValidationException("Фильм с id = " + user.getId() + " не найден");
-        }
-        //имя для отображения может быть пустым — в таком случае будет использован логин;
-        if (user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-        storageMap.put(user.getId(), user);
-        return user;
+        log.info("/users. Update");
+        return inMemoryUserStorage.updateUser(user);
     }
 
-    private User checkNewUser(User user) {
-        //имя для отображения может быть пустым — в таком случае будет использован логин;
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-        //электронная почта не может быть пустой и должна содержать символ @;
-        if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-           log.warn("Электронная почта не может быть пустой и должна содержать символ @");
-            throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");
-        }
-        //логин не может быть пустым и содержать пробелы;
-        if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            log.warn("Логин не может быть пустым и содержать пробелы");
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы");
-        }
-        //дата рождения не может быть в будущем.
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.warn("Дата рождения не может быть в будущем.");
-            throw new ValidationException("Дата рождения не может быть в будущем.");
-        }
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable long id, @PathVariable long friendId) {
+        log.info("Put. /users/{" + id + "}/friends/{" + friendId + "}");
+        userService.addFriend(id, friendId);
+    }
 
-        return user;
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public void delFriend(@PathVariable long id, @PathVariable long friendId) {
+        log.info("Delete. /users/{" + id + "}/friends/{" + friendId + "}");
+        userService.delFriend(id, friendId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/users/{id}/friends")
+    public List<User> getFriends(@PathVariable long id) {
+        log.info("Get. /users/{" + id + "}/friends/");
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public List<User> getMutualFriends(@PathVariable long id, @PathVariable long otherId) {
+        log.info("Get. /users/{" + id + "}/friends/common/{" + otherId + "}");
+        return userService.getMutualFriends(id, otherId);
     }
 }

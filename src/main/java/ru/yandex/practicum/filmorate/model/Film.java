@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Film.
@@ -16,7 +18,6 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class Film {
     long id; //целочисленный идентификатор;
-    @NotNull(message = "Название не может быть пустым")
     @NotBlank(message = "Название не может быть пустым")
     String name; //название
     @Size(max = 200, message = "Максимальная длина описания не должна превышать 200 символов.")
@@ -26,4 +27,16 @@ public class Film {
     @NotNull
     @Positive(message = "Продолжительность должна быть положительным числом")
     Integer duration; //продолжительность фильма — duration.
+
+    Set<Long> userIds = new HashSet<>(); //Пользователи, которые поставили лайк
+
+    public void addUserIds(long userId){
+        userIds.add(userId);
+    }
+    public void delUserIds(long userId){
+        userIds.remove(userId);
+    }
+    public int getLikes(){
+        return userIds.size();
+    }
 }
