@@ -31,6 +31,7 @@ public class User {
     public void addFriendIds(long userId) {
         friendIds.add(userId);
     }
+
     public void delFriendIds(long userId) {
         friendIds.remove(userId);
     }

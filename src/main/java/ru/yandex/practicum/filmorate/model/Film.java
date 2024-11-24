@@ -33,9 +33,11 @@ public class Film {
     public void addUserIds(long userId) {
         userIds.add(userId);
     }
+
     public void delUserIds(long userId) {
         userIds.remove(userId);
     }
+
     public int getLikes() {
         return userIds.size();
     }
