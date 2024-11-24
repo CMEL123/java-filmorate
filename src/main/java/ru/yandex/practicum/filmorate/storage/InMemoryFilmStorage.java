@@ -45,7 +45,7 @@ public class InMemoryFilmStorage extends GeneratorId implements FilmStorage {
 
     public Film getFilm(long filmId) {
         Film film = filmsHash.get(filmId);
-        if (film == null) throw new NotFoundException("Фильм с id = " + filmId +" не найден");
+        if (film == null) throw new NotFoundException("Фильм с id = " + filmId + " не найден");
         return film;
     }
 
