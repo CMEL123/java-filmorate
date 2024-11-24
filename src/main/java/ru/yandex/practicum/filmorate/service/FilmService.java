@@ -43,11 +43,11 @@ public class FilmService {
     public List<Film> getTopFilms(long count) {
         HashMap<Long, Film> filmsHash = inMemoryFilmStorage.getFilmsHash();
         List<Film> listSortLikeFilms = filmsHash.values().stream()
-                .sorted(Comparator.comparing(el -> -1*el.getLikes()))
+                .sorted(Comparator.comparing(el -> (-1) * el.getLikes()))
                 .collect(Collectors.toList());
         List<Film> listOfPopularFilms = new ArrayList<>();
         if (listSortLikeFilms.size() > count) {
-            for(int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++) {
                 listOfPopularFilms.add(listSortLikeFilms.get(i));
             }
         } else {
