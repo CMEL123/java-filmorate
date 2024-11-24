@@ -47,7 +47,7 @@ public class FilmService {
                 .collect(Collectors.toList());
         List<Film> listOfPopularFilms = new ArrayList<>();
         if (listSortLikeFilms.size() > count) {
-            for (int i = 0; i < count; i++ ) {
+            for (int i = 0; i < count; i += 1) {
                 listOfPopularFilms.add(listSortLikeFilms.get(i));
             }
         } else {
