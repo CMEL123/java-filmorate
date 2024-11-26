@@ -17,7 +17,6 @@ import java.util.HashMap;
 public class InMemoryFilmStorage extends GeneratorId implements FilmStorage {
     private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
-    @Getter
     public HashMap<Long, Film> filmsHash = new HashMap<>();
 
     public Collection<Film> getFilms() {
