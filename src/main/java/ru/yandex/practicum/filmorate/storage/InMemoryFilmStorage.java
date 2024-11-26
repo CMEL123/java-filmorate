@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.service.GeneratorId;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -18,6 +17,7 @@ import java.util.HashMap;
 public class InMemoryFilmStorage extends GeneratorId implements FilmStorage {
     private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
+    @Getter
     public HashMap<Long, Film> filmsHash = new HashMap<>();
 
     public Collection<Film> getFilms() {

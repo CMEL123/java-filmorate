@@ -30,11 +30,11 @@ public class Film {
 
     Set<Long> userIds = new HashSet<>(); //Пользователи, которые поставили лайк
 
-    public void addUserIds(long userId) {
+    public void addLike(long userId) {
         userIds.add(userId);
     }
 
-    public void delUserIds(long userId) {
+    public void removeLike(long userId) {
         userIds.remove(userId);
     }
 

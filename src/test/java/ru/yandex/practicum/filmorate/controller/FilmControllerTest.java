@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +10,10 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 
@@ -22,19 +23,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @RequiredArgsConstructor
 public class FilmControllerTest {
-    InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
-    InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
-    FilmService filmService = new FilmService(inMemoryFilmStorage, inMemoryUserStorage);
-    FilmController filmController = new FilmController(inMemoryFilmStorage, filmService);
 
-    UserService userService = new UserService(inMemoryUserStorage);
-    UserController userController = new UserController(inMemoryUserStorage, userService);
+    FilmController filmController;
+    UserController userController;
 
     static Film film = new Film();
     static User user = new User();
 
     @BeforeEach
     public void beforeEach() {
+        FilmStorage filmStorage = new InMemoryFilmStorage();
+        UserStorage userStorage = new InMemoryUserStorage();
+
+        FilmService filmService = new FilmService(filmStorage, userStorage);
+        UserService userService = new UserService(userStorage);
+
+        filmController = new FilmController(filmService);
+        userController = new UserController(userService);
+
         film.setName("Test");
         film.setDescription("Description");
         film.setReleaseDate(LocalDate.now());
@@ -44,13 +50,9 @@ public class FilmControllerTest {
         user.setEmail("1@asd.rt");
         user.setLogin("TestLogin");
         user.setBirthday(LocalDate.now());
-        userController.create(user);
-    }
 
-    @AfterEach
-    public void afterEach() {
-        inMemoryFilmStorage.getFilmsHash().clear();
-        inMemoryUserStorage.getUsersHash().clear();
+        userController.create(user);
+        System.out.println(user);
     }
 
     @Test

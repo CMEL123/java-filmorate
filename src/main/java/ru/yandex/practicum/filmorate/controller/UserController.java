@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,27 +16,26 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
-    private final InMemoryUserStorage inMemoryUserStorage;
     private final UserService userService;
 
     @GetMapping("/users")
     public Collection<User> findAll() {
         log.info("/users");
-        return inMemoryUserStorage.getUsers();
+        return userService.getUsers();
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/users")
     public User create(@Valid @RequestBody User user) {
         log.info("/users. Create");
-        return inMemoryUserStorage.addUser(user);
+        return userService.addUser(user);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/users")
     public User update(@Valid @RequestBody User user) {
         log.info("/users. Update");
-        return inMemoryUserStorage.updateUser(user);
+        return userService.updateUser(user);
     }
 
     @ResponseStatus(HttpStatus.OK)

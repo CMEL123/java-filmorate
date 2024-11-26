@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,21 +16,21 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class FilmService {
-    private final InMemoryFilmStorage inMemoryFilmStorage;
-    private final InMemoryUserStorage inMemoryUserStorage;
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     //пользователь ставит лайк фильму.
     public void addLike(long filmId, long userId) {
-        inMemoryUserStorage.getUser(userId);
-        Film film = inMemoryFilmStorage.getFilm(filmId);
-       film.addUserIds(userId);
+        userStorage.getUser(userId);
+        Film film = filmStorage.getFilm(filmId);
+        film.addLike(userId);
     }
 
     //пользователь удаляет лайк.
     public void delLike(long filmId, long userId) {
-        inMemoryUserStorage.getUser(userId);
-        Film film = inMemoryFilmStorage.getFilm(filmId);
-        film.delUserIds(userId);
+        userStorage.getUser(userId);
+        Film film = filmStorage.getFilm(filmId);
+        film.removeLike(userId);
     }
 
     // Метод возвращает список из первых count фильмов по количеству лайков.
@@ -41,19 +40,21 @@ public class FilmService {
     }
 
     public List<Film> getTopFilms(long count) {
-        HashMap<Long, Film> filmsHash = inMemoryFilmStorage.getFilmsHash();
-        List<Film> listSortLikeFilms = filmsHash.values().stream()
-                .sorted(Comparator.comparing(el -> (-1) * el.getLikes()))
+        Collection<Film> filmsHash = filmStorage.getFilms();
+        return filmsHash.stream()
+                .sorted(Comparator.comparing(el -> (-1) * el.getLikes())).limit(count)
                 .collect(Collectors.toList());
-        List<Film> listOfPopularFilms = new ArrayList<>();
-        if (listSortLikeFilms.size() > count) {
-            for (int i = 0; i < count; i += 1) {
-                listOfPopularFilms.add(listSortLikeFilms.get(i));
-            }
-        } else {
-            listOfPopularFilms = listSortLikeFilms;
-        }
-        return listOfPopularFilms;
     }
 
+    public Collection<Film> getFilms() {
+      return filmStorage.getFilms();
+    }
+
+    public Film addFilm(Film newFilm) {
+        return filmStorage.addFilm(newFilm);
+    }
+
+    public Film updateFilm(Film newFilm) {
+        return filmStorage.updateFilm(newFilm);
+    }
 }

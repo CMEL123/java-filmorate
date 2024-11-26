@@ -3,8 +3,9 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,41 +13,52 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    private final InMemoryUserStorage inMemoryUserStorage;
+    private final UserStorage userStorage;
 
     //получить друзей
     public List<User> getFriends(long userId) {
-        HashMap<Long, User> usersHash = inMemoryUserStorage.getUsersHash();
-        User user = inMemoryUserStorage.getUser(userId);
+        HashMap<Long, User> usersHash = userStorage.getUsersHash();
+        User user = userStorage.getUser(userId);
         return user.getFriendIds().stream().map(usersHash::get).collect(Collectors.toList());
     }
 
     //добавить друга
     public void addFriend(long userId, long friendId) {
-        User user = inMemoryUserStorage.getUser(userId);
-        User friend = inMemoryUserStorage.getUser(friendId);
+        User user = userStorage.getUser(userId);
+        User friend = userStorage.getUser(friendId);
         user.addFriendIds(friendId);
         friend.addFriendIds(userId);
     }
 
     //удалить друга
     public void delFriend(long userId, long friendId) {
-        User user = inMemoryUserStorage.getUser(userId);
-        User friend = inMemoryUserStorage.getUser(friendId);
+        User user = userStorage.getUser(userId);
+        User friend = userStorage.getUser(friendId);
         user.delFriendIds(friendId);
         friend.delFriendIds(userId);
     }
 
     // получить общих друзей
     public List<User> getMutualFriends(long userId, long friendId) {
-        HashMap<Long, User> usersHash = inMemoryUserStorage.getUsersHash();
-        User user = inMemoryUserStorage.getUser(userId);
-        User friend = inMemoryUserStorage.getUser(friendId);
+        HashMap<Long, User> usersHash = userStorage.getUsersHash();
+        User user = userStorage.getUser(userId);
+        User friend = userStorage.getUser(friendId);
 
         return user.getFriendIds().stream()
                 .filter(friend.getFriendIds()::contains)
                 .map(usersHash::get).collect(Collectors.toList());
     }
 
+    public Collection<User> getUsers() {
+        return userStorage.getUsers();
+    }
+
+    public User addUser(User newUser) {
+        return userStorage.addUser(newUser);
+    }
+
+    public User updateUser(User newUser) {
+        return userStorage.updateUser(newUser);
+    }
 
 }
