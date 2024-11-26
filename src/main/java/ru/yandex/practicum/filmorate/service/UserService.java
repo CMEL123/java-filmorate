@@ -58,6 +58,10 @@ public class UserService {
     }
 
     public User updateUser(User newUser) {
+        //имя для отображения может быть пустым — в таком случае будет использован логин;
+        if (newUser.getName().isEmpty()) {
+            newUser.setName(newUser.getLogin());
+        }
         return userStorage.updateUser(newUser);
     }
 

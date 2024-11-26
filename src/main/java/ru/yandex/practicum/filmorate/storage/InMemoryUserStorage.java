@@ -37,10 +37,6 @@ public class InMemoryUserStorage extends GeneratorId implements UserStorage {
         log.info("Update user: {}", newUser);
         checkNewUser(newUser);
         getUser(newUser.getId());
-        //имя для отображения может быть пустым — в таком случае будет использован логин;
-        if (newUser.getName().isEmpty()) {
-            newUser.setName(newUser.getLogin());
-        }
         usersHash.put(newUser.getId(), newUser);
         return newUser;
     }
