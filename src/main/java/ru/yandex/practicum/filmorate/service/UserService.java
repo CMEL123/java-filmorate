@@ -17,7 +17,12 @@ public class UserService {
 
     //получить друзей
     public List<User> getFriends(long userId) {
-        HashMap<Long, User> usersHash = userStorage.getUsersHash();
+        HashMap<Long, User> usersHash = new HashMap<>();
+
+        for (User user: userStorage.getUsers()) {
+            usersHash.put(user.getId(), user);
+        }
+
         User user = userStorage.getUser(userId);
         return user.getFriendIds().stream().map(usersHash::get).collect(Collectors.toList());
     }
@@ -40,7 +45,11 @@ public class UserService {
 
     // получить общих друзей
     public List<User> getMutualFriends(long userId, long friendId) {
-        HashMap<Long, User> usersHash = userStorage.getUsersHash();
+        HashMap<Long, User> usersHash = new HashMap<>();
+
+        for (User user: userStorage.getUsers()) {
+            usersHash.put(user.getId(), user);
+        }
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
 

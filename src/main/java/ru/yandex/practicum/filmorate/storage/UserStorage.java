@@ -15,5 +15,4 @@ public interface UserStorage {
 
     public User getUser(long userId);
 
-    public HashMap<Long, User> getUsersHash();
 }
