@@ -1,35 +1,35 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class UserControllerTest {
-    @Autowired
-    private UserController userController;
+
+    UserController userController;
     static User user = new User();
 
     @BeforeEach
     public void beforeEach() {
+        UserStorage userStorage = new InMemoryUserStorage();
+        UserService userService = new UserService(userStorage);
+        userController = new UserController(userService);
+
         user.setName("Test");
         user.setEmail("1@asd.rt");
         user.setLogin("TestLogin");
         user.setBirthday(LocalDate.now());
-    }
-
-    @AfterEach
-    public void afterEach() {
-        userController.getStorageMap().clear();
     }
 
     @Test
@@ -69,10 +69,10 @@ public class UserControllerTest {
         user2.setLogin("TestLogin");
         user2.setBirthday(LocalDate.now());
 
-        ValidationException thrown = assertThrows(ValidationException.class, () -> {
+        NotFoundException thrown = assertThrows(NotFoundException.class, () -> {
             userController.update(user2);
         });
-        assertEquals("Фильм с id = " + user2.getId() + " не найден", thrown.getMessage());
+        assertEquals("Нет пользователя с id: " + user2.getId(), thrown.getMessage());
         assertEquals(userController.findAll().stream().findFirst().get(), user);
         assertEquals(1, userController.findAll().size());
     }
@@ -154,6 +154,45 @@ public class UserControllerTest {
 
         assertEquals("Дата рождения не может быть в будущем.", thrown.getMessage());
         assertEquals(0, userController.findAll().size());
+    }
+
+    @Test
+    public void testAddFriend() {
+        User user2 = new User();
+        user2.setId(99);
+        user2.setName("Test2");
+        user2.setEmail("1@asd.rt");
+        user2.setLogin("TestLogin");
+        user2.setBirthday(LocalDate.now());
+
+        userController.create(user);
+        userController.create(user2);
+
+        userController.addFriend(user.getId(), user2.getId());
+        assertEquals(1, userController.getFriends(user.getId()).size());
+        assertEquals(1, userController.getFriends(user2.getId()).size());
+        assertTrue(userController.getFriends(user.getId()).contains(user2));
+        assertTrue(userController.getFriends(user2.getId()).contains(user));
+    }
+
+    @Test
+    public void testDelFriend() {
+        User user2 = new User();
+        user2.setId(99);
+        user2.setName("Test2");
+        user2.setEmail("1@asd.rt");
+        user2.setLogin("TestLogin");
+        user2.setBirthday(LocalDate.now());
+
+        userController.create(user);
+        userController.create(user2);
+
+        userController.addFriend(user.getId(), user2.getId());
+        userController.delFriend(user.getId(), user2.getId());
+        assertEquals(0, userController.getFriends(user.getId()).size());
+        assertEquals(0, userController.getFriends(user2.getId()).size());
+        assertFalse(userController.getFriends(user.getId()).contains(user2));
+        assertFalse(userController.getFriends(user2.getId()).contains(user));
     }
 
 }
