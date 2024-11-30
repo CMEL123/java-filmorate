@@ -1,5 +1,5 @@
-# java-kanban
-Repository for homework project.
+# java-filmorate
+Template repository for Filmorate project.
 
 Диаграмма БД
 
