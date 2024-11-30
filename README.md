@@ -8,6 +8,8 @@ Repository for homework project.
 
 Примеры запросов на получения 
 (.\src\main\resources\sql_queries):
-- Получить топ N наиболее популярных фильмов (QueryGetTopFilm.sql)
+- Получить топ N наиболее популярных фильмов
+  [GetTopFilm](src/main/resources/sql_queries/QueryGetTopFilm.txt)
 - Получить список общих друзей с другим пользователем. 
-paramUserId - входной параметр. (QueryGetFriendsByUserId.sql)
+paramUserId - входной параметр.
+  [GetFriendsByUserId](src/main/resources/sql_queries/QueryGetFriendsByUserId.txt)
