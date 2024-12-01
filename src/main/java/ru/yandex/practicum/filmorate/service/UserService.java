@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
