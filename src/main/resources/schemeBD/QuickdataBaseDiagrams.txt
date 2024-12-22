@@ -1,0 +1,46 @@
+https://app.quickdatabasediagrams.com/#/
+
+Genres
+--
+id bigint PK
+name varchar
+
+Film_genre
+--
+id bigint PK
+film_id bigint FK >- Films.id
+genre_id bigint FK >- Genres.id
+
+Ratings
+--
+id bigint PK
+name varchar
+
+Films
+--
+id bigint PK
+name varchar
+description varchar
+release_date date
+duration int
+rating_id bigint FK >- Ratings.id
+
+Likes
+--
+id bigint PK
+film_id bigint FK >- Films.id
+user_id bigint FK >- Users.id
+
+Friendships
+--
+id bigint PK
+user_id1 bigint FK >- Users.id
+user_id2 bigint FK >- Users.id
+
+Users
+--
+id bigint PK
+email varchar
+login varchar
+name varchar
+birthday date

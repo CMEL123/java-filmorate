@@ -8,14 +8,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Film.
  */
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"id"})
 public class Film {
     long id; //целочисленный идентификатор;
     @NotBlank(message = "Название не может быть пустым")
@@ -26,9 +28,11 @@ public class Film {
     LocalDate releaseDate; //дата релиза — releaseDate;
     @NotNull
     @Positive(message = "Продолжительность должна быть положительным числом")
-    Integer duration; //продолжительность фильма — duration.
+    Integer duration;                    //продолжительность фильма — duration.
+    Set<Long> userIds = new HashSet<>();                   //Пользователи, которые поставили лайк
+    Rating mpa;
+    List<Genre> genres = new ArrayList<>();
 
-    Set<Long> userIds = new HashSet<>(); //Пользователи, которые поставили лайк
 
     public void addLike(long userId) {
         userIds.add(userId);
@@ -38,7 +42,11 @@ public class Film {
         userIds.remove(userId);
     }
 
-    public int getLikes() {
+    public long getLikes() {
         return userIds.size();
+    }
+
+    public void addGenre(Genre genre) {
+        genres.add(genre);
     }
 }

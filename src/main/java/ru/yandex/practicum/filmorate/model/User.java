@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"id"})
 public class User {
     long id; //целочисленный идентификатор — id;
     @NotBlank(message = "Электронная почта не может быть пустой")

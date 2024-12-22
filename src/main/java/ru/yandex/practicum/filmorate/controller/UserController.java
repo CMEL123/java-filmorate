@@ -16,6 +16,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping("/users")
@@ -64,4 +65,5 @@ public class UserController {
         log.info("Get. /users/{" + id + "}/friends/common/{" + otherId + "}");
         return userService.getMutualFriends(id, otherId);
     }
+
 }
