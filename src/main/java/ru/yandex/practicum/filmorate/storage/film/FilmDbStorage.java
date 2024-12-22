@@ -77,7 +77,6 @@ public class FilmDbStorage implements FilmStorage {
             return preparedStatement;
         }, keyHolder);
 
-
         film.setId(Objects.requireNonNull(keyHolder.getKey()).longValue()); //для тестов
         return getFilm(film.getId());
     }
