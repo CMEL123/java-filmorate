@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -64,12 +65,12 @@ public class FilmService {
         List<Integer> genres = genreStorage.getGenres().stream().map(el -> el.getId()).toList();
         for (Genre genre : newFilm.getGenres()) {
             if (!genres.contains(genre.getId())) {
-                throw new NotFoundException("Жанра с id = " + genre.getId() + " не найден");
+                throw new ValidationException("Жанра с id = " + genre.getId() + " не найден");
             }
         }
 
         if (newFilm.getMpa() != null && ratingDbStorage.getRating(newFilm.getMpa().getId()) == null) {
-            throw new NotFoundException("Рейтинга с id = " + newFilm.getMpa().getId() + " не найден");
+            throw new ValidationException("Рейтинга с id = " + newFilm.getMpa().getId() + " не найден");
         }
 
         Film film = filmStorage.addFilm(newFilm);
@@ -87,12 +88,12 @@ public class FilmService {
         List<Integer> genres = genreStorage.getGenres().stream().map(el -> el.getId()).toList();
         for (Genre genre : newFilm.getGenres()) {
             if (!genres.contains(genre.getId())) {
-                throw new NotFoundException("Жанра с id = " + genre.getId() + " не найден");
+                throw new ValidationException("Жанра с id = " + genre.getId() + " не найден");
             }
         }
 
         if (newFilm.getMpa() != null && ratingDbStorage.getRating(newFilm.getMpa().getId()) == null) {
-            throw new NotFoundException("Рейтинга с id = " + newFilm.getMpa().getId() + " не найден");
+            throw new ValidationException("Рейтинга с id = " + newFilm.getMpa().getId() + " не найден");
         }
 
         Film film = filmStorage.updateFilm(newFilm);
