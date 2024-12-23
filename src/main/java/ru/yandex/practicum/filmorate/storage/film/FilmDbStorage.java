@@ -121,7 +121,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getTopFilms(long count) {
-        return jdbcTemplate.query(FileReader.readString(TOP_SQL_PATH), new FilmMapper(), (count + 1) );
+        return jdbcTemplate.query(FileReader.readString(TOP_SQL_PATH), new FilmMapper(), (count + 1));
     }
 
     private void checkNewFilm(Film film) {
