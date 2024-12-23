@@ -70,6 +70,7 @@ public class UserDbStorage implements UserStorage {
         user.setId(Objects.requireNonNull(keyHolder.getKey()).longValue()); //для тестов
         return getUser(user.getId());
     }
+
     @Override
     public User updateUser(User newUser) {
         checkNewUser(newUser);

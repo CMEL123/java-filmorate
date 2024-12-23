@@ -11,7 +11,8 @@ import java.util.List;
 
 @Component
 @Primary
-public class RatingDbStorage implements RatingStorage{
+public class RatingDbStorage implements RatingStorage {
+
     private final JdbcTemplate jdbcTemplate;
     private static final String SQL_QUERY_DIR = "src/main/resources/sql_query/rating/";
     private static final String SELECT_ALL_SQL_PATH = SQL_QUERY_DIR + "select_all.sql";
@@ -20,6 +21,7 @@ public class RatingDbStorage implements RatingStorage{
     public RatingDbStorage(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
     @Override
     public List<Rating> getRatings() {
         return jdbcTemplate.query(FileReader.readString(SELECT_ALL_SQL_PATH), new RatingMapper());
