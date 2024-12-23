@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.storage.rating.RatingDbStorage;
 import ru.yandex.practicum.filmorate.storage.rating.RatingStorage;
 
 import java.util.List;
+
 @Service
 public class RatingService {
 
@@ -25,4 +26,5 @@ public class RatingService {
         if (rating == null) throw new NotFoundException("Рейтинга с id = " + id + " не найден");
         return rating;
     }
+
 }
