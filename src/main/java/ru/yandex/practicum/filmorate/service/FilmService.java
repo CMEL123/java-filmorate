@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -45,7 +44,7 @@ public class FilmService {
     }
 
     public List<Film> getTopFilms(long count) {
-        if (count < 0) throw new NotFoundException("Количество фильмов должно быть больше 0");
+        if (count < 0) throw new ValidationException("Количество фильмов должно быть больше 0");
         return filmStorage.getTopFilms(count);
     }
 
@@ -55,7 +54,7 @@ public class FilmService {
 
     public Film getFilm(long id) {
         Film film = filmStorage.getFilm(id);
-        if (film == null) throw new NotFoundException("Фильм с id = " + id + " не найден");
+        if (film == null) throw new ValidationException("Фильм с id = " + id + " не найден");
         film.setGenres(genreStorage.getFilmGenres(film.getId()));
         return film;
     }
