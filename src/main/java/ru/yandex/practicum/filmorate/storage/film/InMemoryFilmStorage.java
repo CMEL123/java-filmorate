@@ -83,6 +83,7 @@ public class InMemoryFilmStorage extends GeneratorId implements FilmStorage {
     public long getLikes(Film film) {
         return film.getLikes();
     }
+
     @Override
     public Set<Long> getLike(Film film) {
         return film.getUserIds();
@@ -99,4 +100,5 @@ public class InMemoryFilmStorage extends GeneratorId implements FilmStorage {
                 .sorted(Comparator.comparing(el -> (-1) * el.getLikes())).limit(count)
                 .collect(Collectors.toList());
     }
+
 }

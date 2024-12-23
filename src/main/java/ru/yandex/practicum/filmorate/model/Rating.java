@@ -9,7 +9,9 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Rating {
+
     @NotNull
     Integer id;
     String name;
+
 }

@@ -26,4 +26,5 @@ public class GenreService {
         if (genre == null) throw new NotFoundException("Жанра с id = " + genreId + " не найден");
         return genre;
     }
+
 }

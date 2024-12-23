@@ -10,8 +10,10 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Genre {
+
     @NotNull
     Integer id;
     @NotBlank(message = "Жанр не может быть пустым и содержать пробелы")
     String name;
+
 }

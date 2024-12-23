@@ -66,5 +66,4 @@ public class GenreDbStorage implements GenreStorage {
         jdbcTemplate.update(FileReader.readString(DELETE_SQL_PATH), filmId);
     }
 
-
 }

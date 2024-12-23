@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 
 public final class FileReader {
+
     public static String readString(String filePath) throws NoSuchElementException {
         try {
             return Files.readString(Paths.get(filePath));
@@ -13,4 +14,5 @@ public final class FileReader {
             throw new ValidationException("Ошибка чтения запроса");
         }
     }
+
 }

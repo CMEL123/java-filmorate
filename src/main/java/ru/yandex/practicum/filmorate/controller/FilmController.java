@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import java.util.Collection;
 import java.util.List;
 
-
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -69,4 +68,5 @@ public class FilmController {
         log.info("Get. /films/{" + id + "}");
         return filmService.getFilm(id);
     }
+
 }
