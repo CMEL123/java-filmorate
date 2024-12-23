@@ -46,7 +46,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUser(long userId) {
-        User user = jdbcTemplate.query( FileReader.readString(SELECT_BY_ID_SQL_PATH), new UserMapper(), userId).stream()
+        User user = jdbcTemplate.query(FileReader.readString(SELECT_BY_ID_SQL_PATH), new UserMapper(), userId).stream()
                 .findAny().orElse(null);
         if (user == null) throw new NotFoundException("Нет пользователя с id: " + userId);
         return user;
@@ -88,20 +88,20 @@ public class UserDbStorage implements UserStorage {
     public void addFriend(long userId, long friendId) {
         getUser(userId);
         getUser(friendId);
-        jdbcTemplate.update( FileReader.readString(INSERT_FRIEND_SQL_PATH), userId, friendId);
+        jdbcTemplate.update(FileReader.readString(INSERT_FRIEND_SQL_PATH), userId, friendId);
     }
 
     @Override
     public void delFriend(long userId, long friendId) {
         getUser(userId);
         getUser(friendId);
-        jdbcTemplate.update( FileReader.readString(DELETE_FRIEND_SQL_PATH), userId, friendId);
+        jdbcTemplate.update(FileReader.readString(DELETE_FRIEND_SQL_PATH), userId, friendId);
     }
 
     @Override
     public List<User> getFriends(long userId) {
         getUser(userId);
-        return jdbcTemplate.queryForList( FileReader.readString(SELECT_FRIEND_SQL_PATH), Long.class, userId).stream()
+        return jdbcTemplate.queryForList(FileReader.readString(SELECT_FRIEND_SQL_PATH), Long.class, userId).stream()
                 .map(this::getUser).toList();
     }
 
