@@ -11,11 +11,11 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import java.util.Collection;
 import java.util.List;
 
-
 @RestController
 @Slf4j
 @RequiredArgsConstructor
 public class FilmController {
+
     private final FilmService filmService;
 
     @GetMapping("/films")
@@ -28,6 +28,7 @@ public class FilmController {
     @PostMapping("/films")
     public Film create(@Valid @RequestBody Film film) {
         log.info("/films. Create");
+        log.info(film.toString());
         return filmService.addFilm(film);
     }
 
@@ -55,4 +56,17 @@ public class FilmController {
         log.info("Get. /films/popular?count={" + count + "}");
         return filmService.getTopFilms(count);
     }
+
+    @GetMapping("/films/{id}/likes")
+    public Long getLikes(@PathVariable long id) {
+        log.info("Get. /films/{" + id + "}/likes");
+        return filmService.getLikes(id);
+    }
+
+    @GetMapping("/films/{id}")
+    public Film getFilm(@PathVariable long id) {
+        log.info("Get. /films/{" + id + "}");
+        return filmService.getFilm(id);
+    }
+
 }

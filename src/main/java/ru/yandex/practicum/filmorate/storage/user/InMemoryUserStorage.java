@@ -1,17 +1,18 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.storage.GeneratorId;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
-@Component
 public class InMemoryUserStorage extends GeneratorId implements UserStorage {
 
     public HashMap<Long, User> usersHash = new HashMap<>();
@@ -24,7 +25,7 @@ public class InMemoryUserStorage extends GeneratorId implements UserStorage {
     @Override
     public User addUser(User newUser) {
         log.info("Create user: {}", newUser);
-        newUser = checkNewUser(newUser);
+        checkNewUser(newUser);
 
         newUser.setId(getNextId(usersHash));
         usersHash.put(newUser.getId(), newUser);
@@ -40,13 +41,14 @@ public class InMemoryUserStorage extends GeneratorId implements UserStorage {
         return newUser;
     }
 
+    @Override
     public User getUser(long userId) {
         User user = usersHash.get(userId);
         if (user == null) throw new NotFoundException("Нет пользователя с id: " + userId);
         return user;
     }
 
-    private User checkNewUser(User user) {
+    private void checkNewUser(User user) {
         //имя для отображения может быть пустым — в таком случае будет использован логин;
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
@@ -70,6 +72,37 @@ public class InMemoryUserStorage extends GeneratorId implements UserStorage {
             throw new ValidationException("Дата рождения не может быть в будущем.");
         }
 
-        return user;
+    }
+
+    @Override
+    public List<User> getFriends(long userId) {
+        User user = getUser(userId);
+        return user.getFriendIds().stream().map(this::getUser).collect(Collectors.toList());
+    }
+
+    @Override
+    public void addFriend(long userId, long friendId) {
+        User user = getUser(userId);
+        User friend = getUser(friendId);
+        user.addFriendIds(friendId);
+        friend.addFriendIds(userId);
+    }
+
+    @Override
+    public void delFriend(long userId, long friendId) {
+        User user = getUser(userId);
+        User friend = getUser(friendId);
+        user.delFriendIds(friendId);
+        friend.delFriendIds(userId);
+    }
+
+    @Override
+    public List<User> getMutualFriends(long userId, long friendId) {
+        User user = getUser(userId);
+        User friend = getUser(friendId);
+
+        return user.getFriendIds().stream()
+                .filter(friend.getFriendIds()::contains)
+                .map(this::getUser).collect(Collectors.toList());
     }
 }

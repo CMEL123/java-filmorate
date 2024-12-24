@@ -4,28 +4,37 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
-@EqualsAndHashCode
+@Getter
+@Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode(of = { "email", "login", "birthday" })
 public class User {
+
+    @ToString.Exclude
     long id; //целочисленный идентификатор — id;
+
     @NotBlank(message = "Электронная почта не может быть пустой")
     @Email(message = "Электронная почта не может быть пустой и должна содержать символ @")
     String email; //электронная почта — email;
 
     @NotBlank(message = "Логин не может быть пустым и содержать пробелы")
     String login; //логин пользователя — login;
+
     String name; //имя для отображения — name;
+
     @NotNull(message = "Дата рождения не может быть пустым.")
     @Past(message = "Дата рождения не может быть в будущем.")
     LocalDate birthday; //дата рождения — birthday.
 
+    @ToString.Exclude
     Set<Long> friendIds = new HashSet<>(); //друзья
 
     public void addFriendIds(long userId) {

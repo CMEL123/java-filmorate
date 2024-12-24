@@ -3,11 +3,10 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -16,34 +15,22 @@ public class UserService {
 
     //получить друзей
     public List<User> getFriends(long userId) {
-        User user = userStorage.getUser(userId);
-        return user.getFriendIds().stream().map(userStorage::getUser).collect(Collectors.toList());
+        return userStorage.getFriends(userId);
     }
 
     //добавить друга
     public void addFriend(long userId, long friendId) {
-        User user = userStorage.getUser(userId);
-        User friend = userStorage.getUser(friendId);
-        user.addFriendIds(friendId);
-        friend.addFriendIds(userId);
+        userStorage.addFriend(userId, friendId);
     }
 
     //удалить друга
     public void delFriend(long userId, long friendId) {
-        User user = userStorage.getUser(userId);
-        User friend = userStorage.getUser(friendId);
-        user.delFriendIds(friendId);
-        friend.delFriendIds(userId);
+        userStorage.delFriend(userId, friendId);
     }
 
     // получить общих друзей
     public List<User> getMutualFriends(long userId, long friendId) {
-        User user = userStorage.getUser(userId);
-        User friend = userStorage.getUser(friendId);
-
-        return user.getFriendIds().stream()
-                .filter(friend.getFriendIds()::contains)
-                .map(userStorage::getUser).collect(Collectors.toList());
+        return userStorage.getMutualFriends(userId, friendId);
     }
 
     public Collection<User> getUsers() {
@@ -55,10 +42,6 @@ public class UserService {
     }
 
     public User updateUser(User newUser) {
-        //имя для отображения может быть пустым — в таком случае будет использован логин;
-        if (newUser.getName().isEmpty()) {
-            newUser.setName(newUser.getLogin());
-        }
         return userStorage.updateUser(newUser);
     }
 

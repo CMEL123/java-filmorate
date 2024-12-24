@@ -4,19 +4,23 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Film.
  */
-@Data
-@EqualsAndHashCode
+@Getter
+@Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode(of = { "name", "releaseDate" })
 public class Film {
+
+    @ToString.Exclude
     long id; //целочисленный идентификатор;
     @NotBlank(message = "Название не может быть пустым")
     String name; //название
@@ -26,9 +30,14 @@ public class Film {
     LocalDate releaseDate; //дата релиза — releaseDate;
     @NotNull
     @Positive(message = "Продолжительность должна быть положительным числом")
-    Integer duration; //продолжительность фильма — duration.
+    Integer duration;                    //продолжительность фильма — duration.
+    @ToString.Exclude
+    Set<Long> userIds = new HashSet<>();                   //Пользователи, которые поставили лайк
+    @ToString.Exclude
+    Rating mpa;
+    @ToString.Exclude
+    LinkedHashSet<Genre> genres = new LinkedHashSet<>();
 
-    Set<Long> userIds = new HashSet<>(); //Пользователи, которые поставили лайк
 
     public void addLike(long userId) {
         userIds.add(userId);
@@ -38,7 +47,7 @@ public class Film {
         userIds.remove(userId);
     }
 
-    public int getLikes() {
-        return userIds.size();
+    public void addGenre(Genre genre) {
+        genres.add(genre);
     }
 }
