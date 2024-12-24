@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.rating.RatingStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
     private final GenreStorage genreStorage;
-    private final RatingStorage ratingDbStorage;
+    private final RatingStorage ratingStorage;
 
     //пользователь ставит лайк фильму.
     public void addLike(long filmId, long userId) {
@@ -68,15 +69,17 @@ public class FilmService {
             }
         }
 
-        if (newFilm.getMpa() != null && ratingDbStorage.getRating(newFilm.getMpa().getId()) == null) {
+        if (newFilm.getMpa() != null && ratingStorage.getRating(newFilm.getMpa().getId()) == null) {
             throw new ValidationException("Рейтинга с id = " + newFilm.getMpa().getId() + " не найден");
         }
 
         Film film = filmStorage.addFilm(newFilm);
+        List<Integer> filmGenres = new ArrayList<>();
         for (Genre genre : newFilm.getGenres()) {
-            if (!film.getGenres().contains(genre)) {
+           if (!filmGenres.contains(genre.getId())) {
                 genreStorage.addGenres(film.getId(), genre.getId());
                 film.addGenre(genre);
+                filmGenres.add(genre.getId());
             }
         }
 
@@ -91,15 +94,17 @@ public class FilmService {
             }
         }
 
-        if (newFilm.getMpa() != null && ratingDbStorage.getRating(newFilm.getMpa().getId()) == null) {
+        if (newFilm.getMpa() != null && ratingStorage.getRating(newFilm.getMpa().getId()) == null) {
             throw new ValidationException("Рейтинга с id = " + newFilm.getMpa().getId() + " не найден");
         }
 
         Film film = filmStorage.updateFilm(newFilm);
+        List<Integer> filmGenres = new ArrayList<>();
         for (Genre genre : newFilm.getGenres()) {
-            if (!film.getGenres().contains(genre)) {
+            if (!filmGenres.contains(genre.getId())) {
                 genreStorage.addGenres(film.getId(), genre.getId());
                 film.addGenre(genre);
+                filmGenres.add(genre.getId());
             }
         }
 

@@ -6,10 +6,8 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.mapper.GenreMapper;
 import ru.yandex.practicum.filmorate.storage.reader.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 @Slf4j
 @Component
@@ -29,8 +27,8 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     @Override
-    public List<Genre> getFilmGenres(Long filmId) {
-        return jdbcTemplate.query(FileReader.readString(SELECT_FILM_GENRES_SQL_PATH), new GenreMapper(), filmId);
+    public LinkedHashSet<Genre> getFilmGenres(Long filmId) {
+        return new LinkedHashSet<>(jdbcTemplate.query(FileReader.readString(SELECT_FILM_GENRES_SQL_PATH), new GenreMapper(), filmId));
     }
 
     @Override
@@ -39,8 +37,8 @@ public class GenreDbStorage implements GenreStorage {
     }
 
     @Override
-    public List<Genre> getGenres() {
-        return new ArrayList<>(jdbcTemplate.query(FileReader.readString(SELECT_ALL_SQL_PATH), new GenreMapper()));
+    public LinkedHashSet<Genre> getGenres() {
+        return new LinkedHashSet<>(jdbcTemplate.query(FileReader.readString(SELECT_ALL_SQL_PATH), new GenreMapper()));
     }
 
     @Override

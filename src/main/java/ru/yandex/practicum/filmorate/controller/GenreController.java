@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.service.GenreService;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class GenreController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/genres")
-    public List<Genre> findAll() {
+    public LinkedHashSet<Genre> findAll() {
         return genreService.getAll();
     }
 
