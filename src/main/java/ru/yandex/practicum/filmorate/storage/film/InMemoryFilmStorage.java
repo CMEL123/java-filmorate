@@ -79,10 +79,6 @@ public class InMemoryFilmStorage extends GeneratorId implements FilmStorage {
         film.addLike(userId);
     }
 
-    @Override
-    public long getLikes(Film film) {
-        return film.getLikes();
-    }
 
     @Override
     public Set<Long> getLike(Film film) {
@@ -97,7 +93,7 @@ public class InMemoryFilmStorage extends GeneratorId implements FilmStorage {
     @Override
     public List<Film> getTopFilms(long count) {
         return getFilms().stream()
-                .sorted(Comparator.comparing(el -> (-1) * el.getLikes())).limit(count)
+                .sorted(Comparator.comparing(el -> (-1) * el.getUserIds().size())).limit(count)
                 .collect(Collectors.toList());
     }
 

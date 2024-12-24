@@ -47,10 +47,6 @@ public class Film {
         userIds.remove(userId);
     }
 
-    public long getLikes() {
-        return userIds.size();
-    }
-
     public void addGenre(Genre genre) {
         genres.add(genre);
     }

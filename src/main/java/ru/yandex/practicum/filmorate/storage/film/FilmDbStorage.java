@@ -104,11 +104,6 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public long getLikes(Film film) {
-        return getLike(film).size();
-    }
-
-    @Override
     public Set<Long> getLike(Film film) {
         return new HashSet<>(jdbcTemplate.queryForList(FileReader.readString(SELECT_LIKE_SQL_PATH), Long.class, film.getId()));
     }

@@ -113,7 +113,7 @@ public class FilmService {
 
     public long getLikes(long filmId) {
         Film film = filmStorage.getFilm(filmId);
-        return filmStorage.getLikes(film);
+        return filmStorage.getLike(film).size();
     }
 
 }

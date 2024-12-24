@@ -16,8 +16,6 @@ public interface FilmStorage {
 
     public Collection<Film> getFilms();
 
-    public long getLikes(Film film);
-
     public Set<Long> getLike(Film film);
 
     public void addLike(Film film, long userId);
